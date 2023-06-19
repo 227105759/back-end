@@ -4,6 +4,13 @@ const router = express.Router();
 const multer = require("multer");
 const { storage } = multer.memoryStorage();
 const upload = multer({ storage: storage });
+const path = require('path');
+const docs = path.join(__dirname, 'docs');;
+
+
+
+const app = express();
+
 
 //get cat list data
 router.get("/cats", async (req, res) => {
@@ -99,34 +106,36 @@ router.delete("/cats/:id", async (req, res) => {
 });
 
 //insert
-router.post("/add-favorite",  async (req, res) => {
+router.post("/add-favorite", async (req, res) => {
   try {
-    const { id } = req.body;
-    //const images = req.file;
+    const { title, age } = req.body;
 
-    const catRef = db.collection("albums").doc();
-    await catRef.set({
-      id: catRef.id,
-    });
+    const catRef = db.collection("cats").doc();
+    await catRef.set(
+      {
+        id: catRef.id,
+        title,
+        age,
+      },
+      { ignoreUndefinedProperties: true }
+    );
 
-    stream.on("error", (err) => {
-      console.error(err);
-      return res.status(500).send(err);
-    });
-
-    stream.on("finish", async () => {
-
-      res.status(200).send({ success: true, catId: catRef.id });
-    });
-
-    stream.end(images.buffer);
+    res.status(200).send({ success: true, catId: catRef.id });
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
   }
 });
 
+router.use('/', express.static(docs));
+
+
 module.exports = router;
+
+
+
+
+
 /**
  * openapi: 3.0.0
 info:

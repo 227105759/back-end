@@ -1,0 +1,130 @@
+ openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Cat API
+  description: A RESTful API for managing cat data
+servers:
+  - url: http://localhost:3000
+paths:
+  /cats:
+    get:
+      summary: Get a list of cats
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    title:
+                      type: string
+                    age:
+                      type: integer
+                    images:
+                      type: string
+    post:
+      summary: Add a new cat
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                age:
+                  type: integer
+                images:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  catId:
+                    type: string
+  /cats/{id}:
+    put:
+      summary: Update a cat by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the cat to update
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                age:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    delete:
+      summary: Delete a cat by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the cat to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /add-favorite:
+    post:
+      summary: Add a cat to favorites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  catId:
+                    type: string
+ 
+
